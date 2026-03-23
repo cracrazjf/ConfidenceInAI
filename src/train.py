@@ -58,6 +58,10 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=cfg.data.batch_size, shuffle=cfg.data.shuffle_dataloader, num_workers=cfg.data.num_workers)
     val_loader = DataLoader(val_dataset, batch_size=cfg.data.batch_size, shuffle=False, num_workers=cfg.data.num_workers) 
 
+    for batch in train_loader:
+        print(batch["pixel_values"].shape, batch["labels"].shape)
+        break
+
     tm = TrainingManager(cfg)
     tm.train(train_loader, val_loader, eval_fn=None)
 

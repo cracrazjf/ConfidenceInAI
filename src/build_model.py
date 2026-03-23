@@ -22,9 +22,9 @@ def main():
         "name": "cnn",
         "model_type": "cnn_custom",
         "path": "/models",
-        "image_shape": (3, 64, 64),
+        "image_shape": (3, 32, 32),
         "embed_size": 128,
-        "num_classes": 10,
+        "num_classes": 100,
         "path": "./models"
     })
     model = None
