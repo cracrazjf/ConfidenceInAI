@@ -197,7 +197,7 @@ def load_split_info(root, split_path, dataset_name):
     if dataset_name not in ["cifar10", "cifar100"]:
         raise ValueError("dataset_name must be 'cifar10' or 'cifar100'")
     
-    train_transform, eval_transform, _ = get_transforms(dataset_name, augment=False)
+    train_transform, eval_transform, _ = get_transforms(dataset_name, augment=True)
 
     if dataset_name == "cifar10":
         base_train = datasets.CIFAR10(root=root, train=True, download=True, transform=None)
