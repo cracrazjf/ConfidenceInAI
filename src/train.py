@@ -7,8 +7,8 @@ from psychai.vision.vm import ModelManager, TrainingManager
 
 def main():
     cfg = TrainingConfig()
-    exp_name = "cia_cifar10_cnn"
-    model_name = "cnn"
+    exp_name = "cia_cifar100_resnet18"
+    model_name = "resnet18"
     updates = {
         "model": {
             "name": f"{model_name}",
@@ -17,23 +17,28 @@ def main():
             "wrapper": "classification",
         },
         "data": {
-            "name": "cifar10",
+            "name": "cifar100",
             "data_process_batch_size": 20,
             "data_process_num_proc": 4,
             "batch_size": 128,
             "num_workers": 0
         },
         "optim": {
-            "lr": 1e-3,
-            "optimizer": "adam",
+            "lr": 0.1,
+            "optimizer": "sgd",
+            "momentum": 0.9,
+            "weight_decay": 5e-4,
+            "lr_scheduler": "multistep",
+            "lr_steps": [100, 150],
+            "gamma": 0.1,
         },
         "logging": {
             "log_strategy": "epoch",
-            "log_interval": 10,
+            "log_interval": 20,
             "save_interval": 10,
             "save_total_limit": 5,
             "eval_strategy": "epoch",
-            "eval_interval": 5,
+            "eval_interval": 20,
             "prefer_safetensors": True,
             "return_embeddings": False,
             "return_weights": False
@@ -41,7 +46,7 @@ def main():
         "exp_name": exp_name,
         "exp_dir": f"./trained/{exp_name}",
         "num_runs": 1,
-        "num_epochs": 50,
+        "num_epochs": 200,
         "seed": 66,
         "device": "cpu",
     }

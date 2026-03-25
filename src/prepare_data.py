@@ -58,7 +58,7 @@ class AddSaltPepperNoise:
         return x
 
 
-def get_transforms(dataset_name="cifar10", augment=True, test_augment=None):
+def get_transforms(dataset_name="cifar10", augment=True, test_augment="clean"):
     """
     test_augment options:
         None
@@ -89,7 +89,7 @@ def get_transforms(dataset_name="cifar10", augment=True, test_augment=None):
     ])
 
     # ----- Test (possibly noisy) -----
-    if test_augment is None:
+    if "clean" in test_augment:
         test_transform = eval_transform
     else:
         noise_type = test_augment.get("type")
@@ -134,10 +134,11 @@ class TransformSubset(torch.utils.data.Dataset):
         return len(self.indices)
 
     def __getitem__(self, idx):
-        x, y = self.dataset[self.indices[idx]]
+        real_idx = self.indices[idx]
+        x, y = self.dataset[real_idx]
         if self.transform is not None:
             x = self.transform(x)
-        return {"pixel_values": x, "labels": y}
+        return {"pixel_values": x, "labels": y, "idx": real_idx}
 
 
 def prepare_cifar_data(
@@ -192,12 +193,12 @@ def prepare_cifar_data(
     print(f"\nSaved split info to: {split_path}")
 
 
-def load_split_info(root, split_path, dataset_name):
+def load_split_info(root, split_path, dataset_name, augment=True):
     dataset_name = dataset_name.lower()
     if dataset_name not in ["cifar10", "cifar100"]:
         raise ValueError("dataset_name must be 'cifar10' or 'cifar100'")
     
-    train_transform, eval_transform, _ = get_transforms(dataset_name, augment=True)
+    train_transform, eval_transform, _ = get_transforms(dataset_name, augment=augment)
 
     if dataset_name == "cifar10":
         base_train = datasets.CIFAR10(root=root, train=True, download=True, transform=None)
