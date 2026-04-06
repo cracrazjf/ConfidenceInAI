@@ -36,7 +36,7 @@ def main():
             "log_strategy": "epoch",
             "log_interval": 20,
             "save_interval": 10,
-            "save_total_limit": 5,
+            "save_total_limit": 0,
             "eval_strategy": "epoch",
             "eval_interval": 20,
             "prefer_safetensors": True,
